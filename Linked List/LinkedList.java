@@ -1,6 +1,6 @@
 public class LinkedList {
 
-    class Node {
+    static class Node {
         int data;
         Node next;
 
@@ -222,8 +222,51 @@ public class LinkedList {
         return true;
     }
 
+    public static boolean isCycle(){
+        Node slow = head;
+        Node fast = head;
+
+        while (fast!=null&&fast.next!=null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if(slow==fast){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static void removeCycle(){
+        //detect cycle
+        Node slow = head;
+        Node fast = head;
+        boolean cycle = false;
+        while (fast!=null&&fast.next!=null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (fast==slow) {
+                cycle=true;
+                break;
+            }
+        }
+        if (cycle==false) {
+            return;
+        }
+        //find meeting point
+        slow = head;
+        Node prev = null;
+        while (slow!=fast) {
+            prev=fast;
+            slow=slow.next;
+            fast=fast.next;
+        }
+
+        //remove cycle
+        prev.next = null;
+    }
+
     public static void main(String[] args) {
-        LinkedList ll = new LinkedList();
+        // LinkedList ll = new LinkedList();
         // ll.addFirst(2);
         // ll.addFirst(1);
         // ll.addLast(4);
@@ -244,11 +287,21 @@ public class LinkedList {
         // ll.print();
 
         //palindrome
-        ll.addLast(1);
-        ll.addLast(2);
-        ll.addLast(2);
-        ll.addLast(1);
-        ll.print();
-        System.out.println(ll.checkPalindrome());
+        // ll.addLast(1);
+        // ll.addLast(2);
+        // ll.addLast(2);
+        // ll.addLast(1);
+        // ll.print();
+        // System.out.println(ll.checkPalindrome());
+
+        //Detect a loop
+        head = new Node(1);
+        Node temp = new Node(2);
+        head.next = temp;
+        head.next.next = new Node(3);
+        head.next.next.next = temp;
+        System.out.println(isCycle());
+        removeCycle();
+        System.out.println(isCycle());
     }
 }
